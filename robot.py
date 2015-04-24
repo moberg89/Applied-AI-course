@@ -4,42 +4,62 @@ Created on Fri Apr 24 11:39:04 2015
 
 @author: ragnar
 """
-import numpy
+import math
 
-class CommandClass:
-    #Either the robot is told a trajectory or position
-    def __init__(self, x=[], y=[], v=[], theta=[]):
-        if v==[]:        
-            self.x=x
-            self.y=y
-            self.v=[]        
-            self.theta=[]    
-        else:    
-            self.x=[]
-            self.y=[]
-            self.v=v        
-            self.theta=theta
+#def __init__(self, x=0, y=0, theta=0, v=0):
+#    self.posx=x
+#    self.posy=y
+#    self.postheta=theta
+#    self.velocity=v
+#    #Private variables
+#    self.error_theta=0
+#    self.error_velocity=0
+#    self.deltaxy=1
+#    self.deltatheta=1
 
-def __init__(self, x=0, y=0, theta=0, v=0):
-    posx=x
-    posy=y
-    postheta=theta
-    velocity=v
+posx=0
+posy=0
+postheta=1
+velocity=1
+#Private variables
+error_theta=0
+error_velocity=0
+deltaxy=0.1
+deltatheta=0.1
 
-def get_pos(self):
-    return x,y    
+def get_pos():
+    return [posx, posy]    
         
-def get_ori(self):
-    return theta
+def get_ori():
+    return postheta
     
 def move(command):
-    if command.v=[]:
+    if command.v==[]:
         xycontrol(command.x, command.y)
     else:
         polarcontrol(command.theta, command.v)
+    updaterobot()
     
+#Following code will be made private    
 def xycontrol(x,y):
-    pass
-
+    relativex=posx-x
+    relativey=posy-y
+    theta=math.atan2(relativey, relativex)
+    v=math.hypot(relativex, relativey) #TODO improve
+    polarcontrol(theta,v) #Lazy shit that will be replaced later
+    
 def polarcontrol(theta,v):
-    pass
+    global error_theta
+    global error_velocity    
+    error_theta=postheta-theta    
+    error_velocity=velocity-v
+    
+def updaterobot():
+    global postheta
+    global posx
+    global posy
+    postheta=postheta-error_theta*deltatheta
+    posx=posx-math.cos(postheta)*deltaxy*velocity
+    posy=posy-math.sin(postheta)*deltaxy*velocity
+    
+    
