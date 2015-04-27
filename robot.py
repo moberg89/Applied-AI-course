@@ -20,12 +20,13 @@ import math
 posx=0
 posy=0
 postheta=1
-velocity=1
+velocity=0
 #Private variables
 error_theta=0
 error_velocity=0
 deltaxy=0.1
 deltatheta=0.1
+deltavelocity=0.01
 
 def get_pos():
     return [posx, posy]    
@@ -45,7 +46,7 @@ def xycontrol(x,y):
     relativex=posx-x
     relativey=posy-y
     theta=math.atan2(relativey, relativex)
-    v=math.hypot(relativex, relativey) #TODO improve
+    v=math.hypot(relativex, relativey)/10 #TODO improve
     polarcontrol(theta,v) #Lazy shit that will be replaced later
     
 def polarcontrol(theta,v):
@@ -58,7 +59,9 @@ def updaterobot():
     global postheta
     global posx
     global posy
+    global velocity
     postheta=postheta-error_theta*deltatheta
+    velocity=velocity-error_velocity*deltavelocity
     posx=posx-math.cos(postheta)*deltaxy*velocity
     posy=posy-math.sin(postheta)*deltaxy*velocity
     
