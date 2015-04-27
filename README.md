@@ -1,1 +1,1 @@
-# Applied-AI-course
+# Applied-ai-course
