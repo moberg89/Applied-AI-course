@@ -79,6 +79,7 @@ class PathFinder(object):
         closedlist = []
         
         openlist.append(start)
+        
         while len(openlist)>0:
             active = openlist.pop()
             closedlist.append(active)
@@ -161,6 +162,10 @@ class PathFinder(object):
             n.inOpen = False
             n.parent = None
                 
+"""
+import matplotlib.pyplot as plot
+import plot as p
+
 
 def test(arr):
     for y in range(len(arr)):
@@ -197,9 +202,14 @@ pf.Setup(m)
 
 start = m[0][2]
 goal = m[3][2]
+xlog = []
+ylog = []
+
 path = pf.FindPath(start,goal)
+
+for z in path:
+    xlog.append(z[1])
+    ylog.append(z[0])
 path
-
-
-
-    
+p.plotall(xlog,ylog)
+"""    
